@@ -2,7 +2,7 @@
 #include <vector>
 
 namespace ft {
-    template<typename T, class Container = std::vector<T> >
+    template <typename T, class Container = std::vector<T> >
     class stack;
 }
 template<typename T, class Container>
@@ -12,7 +12,7 @@ public:
     typedef T value_type;
     typedef Container container_type;
     typedef std::size_t size_type;
-private:
+public:
     container_type _ct;
 
 public:
@@ -23,23 +23,50 @@ public:
         this->_ct = _ct;
     }
 
-
-
     //METHODS
     bool empty() const {
             return _ct.empty();
     }
 
-    std::size_t size() const {
+    size_type size() const {
         return _ct.size();
     }
 
     void pop() {
-        _ct.pop_back();
+         _ct.pop_back();
     }
 
     void push(value_type &v) {
         _ct.push_back(v);
+    }
+
+    value_type &top() {
+        return _ct.back();
+    }
+
+    //OPERATORS
+    bool operator==(const stack<T, Container> &b) const {
+        return _ct == b._ct;
+    }
+
+    bool operator!=(const stack<T, Container> &b) const {
+        return _ct != b._ct;
+    }
+
+    bool operator<(const stack<T, Container> &b) const {
+        return _ct < b._ct;
+    }
+
+    bool operator>(const stack<T, Container> &b) const {
+        return _ct > b._ct;
+    }
+
+    bool operator<=(const stack<T,Container> &b) const {
+        return _ct <= b._ct;
+    }
+
+    bool operator>=(const stack<T,Container> &b) const {
+        return _ct >= b._ct;
     }
 
     ~stack() {};
