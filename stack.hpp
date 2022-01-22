@@ -12,7 +12,7 @@ public:
     typedef T value_type;
     typedef Container container_type;
     typedef std::size_t size_type;
-public:
+private:
     container_type _ct;
 
 public:
