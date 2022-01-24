@@ -85,6 +85,18 @@ namespace ft {
             return *this;
         }
 
+        value_type operator[](int _n) const {
+            return *(*this + _n);
+        }
+
+        rac_iterator_v& operator*() const {
+            return *_p;
+        }
+
+        rac_iterator_v operator->() const {
+            return _p;
+        }
+
 
 
         ~rac_iterator_v(){};
