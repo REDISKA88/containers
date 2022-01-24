@@ -97,9 +97,7 @@ namespace ft {
             return _p;
         }
 
-
-
-        ~rac_iterator_v(){};
+        virtual ~rac_iterator_v(){};
     };
 
     template<typename T>
@@ -108,7 +106,7 @@ namespace ft {
         typedef T       value_type;
         typedef T*      pointer;
         typedef T&      reference;
-    private:
+
         const_rac_iterator_v() {};
         const_rac_iterator_v(pointer p) {
             this->_p = p;
@@ -116,7 +114,7 @@ namespace ft {
         const_rac_iterator_v(const const_rac_iterator_v &cr) {
                 *this = cr;
         }
-        // ----------------------------------------------------
+        // --------------------------------------------------------------
         const_rac_iterator_v& operator=(const const_rac_iterator_v &cr) {
             this->_p = cr._p;
             return *this;
@@ -128,6 +126,78 @@ namespace ft {
             return (*this->_p);
         }
         ~const_rac_iterator_v() {};
+    };
+
+    template<typename T>
+    class reverse_iterator_v : public rac_iterator_v<T> {
+    public:
+        typedef T       value_type;
+        typedef T*      pointer;
+        typedef T&      reference;
+
+        reverse_iterator_v(){};
+        reverse_iterator_v(pointer p) {
+            this->_p = p;
+        }
+        reverse_iterator_v(const reverse_iterator_v& rev) {
+            *this = rev;
+        }
+
+        reverse_iterator_v& operator=(const reverse_iterator_v &rev) {
+            if (this != &rev)
+                this->_p = rev._p;
+            return *this;
+        }
+        bool operator==(const reverse_iterator_v &rev) {
+            return this->_p == rev._p;
+        }
+        bool operator!=(const reverse_iterator_v &rev) {
+            return this->_p != rev._p;
+        }
+
+        // ---------------------------------------------
+        reverse_iterator_v& operator++() {
+            this->_p--;
+            return *this;
+        }
+        reverse_iterator_v operator++(int) {
+            reverse_iterator_v _tmp = *this;
+            this->operator--();
+            return _tmp;
+        }
+
+        reverse_iterator_v& operator--() {
+            this->_p++;
+            return *this;
+        }
+        reverse_iterator_v operator--(int) {
+            reverse_iterator_v _tmp = *this;
+            this->operator++();
+            return _tmp;
+        }
+
+        reverse_iterator_v& operator+=(int _n) {
+            this->_p -= _n;
+            return *this;
+        }
+
+        reverse_iterator_v operator+(int _n) {
+            reverse_iterator_v _tmp = *this;
+            _tmp._p -= _n;
+            return _tmp;
+        }
+
+        reverse_iterator_v& operator-=(int _n) {
+            this->_p += _n;
+            return *this;
+        }
+
+        reverse_iterator_v operator-(int _n) {
+            reverse_iterator_v _tmp = *this;
+            _tmp._p += _n;
+            return _tmp;
+        }
+        ~reverse_iterator_v() {};
     };
 
 }
