@@ -85,15 +85,15 @@ namespace ft {
             return *this;
         }
 
-        value_type operator[](int _n) const {
+        value_type& operator[](int _n) const {
             return *(*this + _n);
         }
 
-        rac_iterator_v& operator*() const {
+        value_type& operator*() const {
             return *_p;
         }
 
-        rac_iterator_v operator->() const {
+        value_type* operator->() const {
             return _p;
         }
 
@@ -102,6 +102,33 @@ namespace ft {
         ~rac_iterator_v(){};
     };
 
+    template<typename T>
+    class const_rac_iterator_v : public rac_iterator_v<T> {
+    public:
+        typedef T       value_type;
+        typedef T*      pointer;
+        typedef T&      reference;
+    private:
+        const_rac_iterator_v() {};
+        const_rac_iterator_v(pointer p) {
+            this->_p = p;
+        }
+        const_rac_iterator_v(const const_rac_iterator_v &cr) {
+                *this = cr;
+        }
+        // ----------------------------------------------------
+        const_rac_iterator_v& operator=(const const_rac_iterator_v &cr) {
+            this->_p = cr._p;
+            return *this;
+        }
+       const value_type& operator[](int _n) const {
+            return *(*this + _n);
+        }
+        const value_type& operator*() const {
+            return (*this->_p);
+        }
+        ~const_rac_iterator_v() {};
+    };
 
 }
 #endif
