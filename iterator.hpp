@@ -197,8 +197,37 @@ namespace ft {
             _tmp._p += _n;
             return _tmp;
         }
+
+        reverse_iterator_v& operator[](int _n) {
+            return *(*this - _n);
+        }
+
         ~reverse_iterator_v() {};
     };
 
+    template <typename T>
+    class const_reverse_iterator_v : public reverse_iterator_v<T> {
+    public:
+        typedef T value_type;
+        typedef T *pointer;
+        typedef T &reference;
+
+        const_reverse_iterator_v(){};
+        const_reverse_iterator_v(pointer p) {
+            this->_p = p;
+        }
+        const_reverse_iterator_v(const const_reverse_iterator_v&c_rev) {
+            *this = c_rev;
+        }
+        const_reverse_iterator_v& operator=(const_reverse_iterator_v&c_rev) {
+            if (this != c_rev)
+                this->_p = c_rev._p;
+            return *this;
+        }
+        const const_reverse_iterator_v& operator[](int _n) {
+            return *(*this - _n);
+        }
+        ~const_reverse_iterator_v(){};
+    };
 }
 #endif
