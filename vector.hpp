@@ -116,6 +116,10 @@ public:
     const_reference back() const {
         return _v[_size - 1];
     }
+    void clear() {
+        while (_size > 0)
+            pop_back();
+    }
 
    /* iterator insert(iterator _it, const value_type&_vt) {
         size_type   n = 0;
@@ -143,8 +147,9 @@ public:
    }
 
    void pop_back() {
-
+       _allocator.destroy(&_v[--this->_size]);
    }
+
    reference at(size_type index) {
        if (index >= _size)
            throw std::out_of_range("out of range");
@@ -164,6 +169,12 @@ public:
 
    const_reference operator[](size_type index) const {
        return _v[index];
+   }
+
+   ~vector() {
+       for (size_type i = 0; i < _size; i++)
+           _allocator.destroy(&_v[i]);
+       _allocator.deallocate(_v, _capacity);
    }
 };
 
