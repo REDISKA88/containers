@@ -31,8 +31,13 @@ private:
     size_type                                           _size;
 public:
 
+  /*  explicit vector(const allocator_type&_a = allocator_type())
+        :_size(0), _capacity(0), _v(NULL), _allocator(_a){};*/
+    //NULL pointer initialization
     explicit vector(const allocator_type&_a = allocator_type())
-        :_size(0), _capacity(0), _v(NULL), _allocator(_a){}; //NULL pointer initialization
+            :_size(0), _capacity(0), _allocator(_a) {
+        _v = _allocator.allocate(_capacity);
+    }; // with 0 size;
     explicit vector(size_type _s, const value_type&_value = value_type(), const allocator_type&_a = allocator_type())
         : _size(_s), _capacity(_s), _allocator(_a) {
         _v = _allocator.allocate(_s);
@@ -47,6 +52,28 @@ public:
     iterator begin() {
         return iterator(_v);
     }
+    const_iterator begin() const {
+        return const_iterator(_v);
+    }
+    iterator end() {
+        return iterator(_v + _size);
+    }
+    const_iterator end() const {
+        return const_iterator(_v + _size);
+    }
+    reverse_iterator rbegin() {
+        return reverse_iterator(_v + _size - 1);
+    }
+    const_reverse_iterator rbegin() const {
+        return const_reverse_iterator(_v + _size - 1);
+    }
+    reverse_iterator rend() {
+        return reverse_iterator(_v - 1);
+    }
+    const_reverse_iterator rend() const {
+        return const_reverse_iterator(_v - 1);
+    }
+    //----------------------------------------------------
     //METHODS
     void reserve(size_type s) {
         pointer new_pointer = _allocator.allocate(s);
