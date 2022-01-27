@@ -117,8 +117,15 @@ public:
         return _v[_size - 1];
     }
     void clear() {
-        while (_size > 0)
-            pop_back();
+        for (size_t i = 0; i < _size; i++)
+            _allocator.destroy(&_v[i]);
+        _size = 0;
+    }
+
+    size_type max_size() const {
+        size_type ms;
+        ms = _allocator.max_size();
+        return ms;
     }
 
    /* iterator insert(iterator _it, const value_type&_vt) {
@@ -129,25 +136,41 @@ public:
 
     }*/
    void push_back(const value_type& vt) {
-        if (_capacity == _size) {
-            size_type _st;
+        if (_size + 1 > _capacity) {
             if (_size == 0)
-                _st = 1;
+                _capacity = 1;
             else
-                _st = _capacity * 2;
+                _capacity *= 2;
             pointer _v_reallocate;
-            _v_reallocate = _allocator.allocate(_st);
-            for (size_type i = 0; i < _st; i++)
+            _v_reallocate = _allocator.allocate(_capacity);
+            for (size_type i = 0; i < _capacity; i++)
                 _allocator.construct(&_v_reallocate[i], _v[i]);
             ~vector();
             _v = _v_reallocate;
-            _capacity = _st;
         }
         _allocator.construct(&_v[_size++],vt);
    }
 
    void pop_back() {
        _allocator.destroy(&_v[--this->_size]);
+   }
+
+
+    void assign(size_type n, const value_type& val) {
+       this->clear();
+       if (n > _capacity)
+           _capacity = n;
+       for (size_type i = 0; i < _size; i++)
+           _allocator.destroy(_v + i);
+       _allocator.deallocate(_v, _size);
+       _v = _allocator.allocate(_capacity);
+       for (size_t i = 0; i < _size; i++)
+           _allocator.construct(_v + i, val);
+       _size = n;
+   }
+    template <class InputIterator>
+    void assign (InputIterator first, InputIterator last) {
+
    }
 
    reference at(size_type index) {
