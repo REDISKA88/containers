@@ -1,6 +1,8 @@
 #ifndef VECTOR_H
 #include <iostream>
 #include <memory>
+#include <stdexcept>
+
 #include "iterator.hpp"
 /*#include <vector>
 std::vector<int> i;*/
@@ -85,6 +87,8 @@ public:
     }
 
     void resize(size_type s, value_type vt = value_type()) {
+        if (s > _capacity)
+
         while (_size != s) {
             if (s > _size)
                 push_back(vt);
@@ -92,12 +96,27 @@ public:
                 pop_back();
         }
     }
+
+    //simple
+    size_type capacity() {
+        return _capacity;
+    }
     bool empty() const {
         return _size == 0;
     }
     reference front() {
         return _v[0];
     }
+    const_reference front() const {
+        return _v[0];
+    }
+    reference back() {
+        return _v[_size - 1];
+    }
+    const_reference back() const {
+        return _v[_size - 1];
+    }
+
    /* iterator insert(iterator _it, const value_type&_vt) {
         size_type   n = 0;
         iterator    start = begin();
@@ -106,11 +125,45 @@ public:
 
     }*/
    void push_back(const value_type& vt) {
-
+        if (_capacity == _size) {
+            size_type _st;
+            if (_size == 0)
+                _st = 1;
+            else
+                _st = _capacity * 2;
+            pointer _v_reallocate;
+            _v_reallocate = _allocator.allocate(_st);
+            for (size_type i = 0; i < _st; i++)
+                _allocator.construct(&_v_reallocate[i], _v[i]);
+            ~vector();
+            _v = _v_reallocate;
+            _capacity = _st;
+        }
+        _allocator.construct(&_v[_size++],vt);
    }
 
    void pop_back() {
 
+   }
+   reference at(size_type index) {
+       if (index >= _size)
+           throw std::out_of_range("out of range");
+       else
+           return _v[index];
+   }
+   const_reference at(size_type index) const {
+       if (index >= _size)
+           throw std::out_of_range("out of range");
+       else
+           return _v[index];
+   }
+
+   reference operator[](size_type index) {
+       return _v[index];
+   };
+
+   const_reference operator[](size_type index) const {
+       return _v[index];
    }
 };
 
