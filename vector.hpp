@@ -184,7 +184,7 @@ public:
    iterator erase(iterator position) {
        pointer p_v;
        iterator it = begin();
-       size_t i = 0;
+       size_type i = 0;
        while (it != position) {
            it++;
            i++;
@@ -197,8 +197,22 @@ public:
        _allocator.destroy(&_v[_size]);
        _size--;
        return it;
-
    }
+    iterator erase (iterator first, iterator last) {
+       size_type i = 0;
+       size_type j = 0;
+       iterator it = first;
+       while (it != last) {
+           it++;
+           j++;
+       }
+       while (i != j) {
+           erase(first);
+           i++;
+       }
+       return it;
+   }
+
     template <typename InputIterator>
     //STL MARK: Check whether it's an integral type.  If so, it's not an iterator.
     typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
