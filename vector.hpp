@@ -48,9 +48,13 @@ public:
             _allocator.construct(_v + i, _value);
     }
 //-----------------------------------------------
-    //template <typename _InputIterator>
-    /*vector(_InputIterator _first, _InputIterator _last, const allocator_type&_a = allocator_type())
-        :*/
+    template <typename InputIterator>
+    vector(InputIterator first, InputIterator last, const allocator_type&_a = allocator_type())
+        :_size(0), _capacity(0), _allocator(_a) {
+        _v = _allocator.allocate(0);
+        this->assign(first, last);
+    }
+
     //ITERATORS
     iterator begin() {
         return iterator(_v);
