@@ -5,8 +5,8 @@
 #include "iterator.hpp"
 #include "enable_if.hpp"
 #include "is_integral.hpp"
-/*#include <vector>
-std::vector<int> i;*/
+#include <vector>
+std::vector<int> i;
 namespace ft {
     template <typename T, class Allocator = std::allocator<T> >
     class vector;
@@ -169,10 +169,11 @@ public:
            _allocator.construct(_v + i, val);
        _size = n;
    }
-    template <class InputIterator>
+
+    template <typename InputIterator>
     //STL MARK: Check whether it's an integral type.  If so, it's not an iterator.
-    typename enable_if<!is_integral<InputIterator>::_value, void>::_type
-    void assign (InputIterator first, InputIterator last) {
+    typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
+    assign(InputIterator first, InputIterator last, int s) {
         this->clear();
         for(; first != last; ++first)
             push_back(*first);
