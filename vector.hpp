@@ -140,13 +140,33 @@ public:
         return ms;
     }
 
-   /* iterator insert(iterator _it, const value_type&_vt) {
-        size_type   n = 0;
-        iterator    start = begin();
-        while (start + n != _it && n < _size)
-            n++;
+    iterator insert(iterator _it, const value_type&_vt) {
+        if (_size == 0)
+            reserve(1);
+        else if (_size + 1 > _capacity)
+            reserve(_capacity * 2);
+        size_type   n = _it - begin();
+        for (size_type i = _size - 1; i > n; i--)
+            _allocator.construct(&_v[i + 1], _v[i]);
+        _allocator.construct(&_v[n], _vt);
+        _size++;
+        return (this->_v + n);
+    }
 
-    }*/
+    void insert(iterator _it, size_type n, const value_type&_vt) {
+        vector t_v(_it, this->end());
+        iterator t_it = t_v.begin();
+        while (this->end() != _it) {
+            pop_back();
+        }
+        for (size_t i = n; i > 0; --i) {
+            push_back(_vt);
+        }
+        while (t_it != t_v.end()) {
+            push_back(*t_it);
+            ++t_it;
+        }
+    }
    void push_back(const value_type& vt) {
         if (_size + 1 > _capacity) {
             if (_size == 0)
@@ -221,6 +241,27 @@ public:
         for(; first != last; ++first)
             push_back(*first);
    }
+
+    void swap(vector &sw) {
+        pointer t_v;
+        size_type t_capacity;
+        size_type t_size;
+        allocator_type t_allocator;
+
+        t_v = _v;
+        t_size = _size;
+        t_allocator = _allocator;
+        t_capacity = _capacity;
+
+        _v = sw._v;
+        _size = sw._size;
+        _allocator = sw._allocator;
+        _capacity = sw._capacity;
+        sw._allocator = t_allocator;
+        sw._v = t_v;
+        sw._size = t_size;
+        sw._capacity = t_capacity;
+    }
 
    reference at(size_type index) {
        if (index >= _size)
