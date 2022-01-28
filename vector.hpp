@@ -55,6 +55,9 @@ public:
         this->assign(first, last);
     }
 
+    vector(const vector&V):_size(0),_capacity(0),_allocator(V._allocator),_v(NULL) {
+        *this = V;
+    }
     //ITERATORS
     iterator begin() {
         return iterator(_v);
