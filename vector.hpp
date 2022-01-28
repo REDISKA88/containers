@@ -2,8 +2,9 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
-
 #include "iterator.hpp"
+#include "enable_if.hpp"
+#include "is_integral.hpp"
 /*#include <vector>
 std::vector<int> i;*/
 namespace ft {
@@ -169,8 +170,12 @@ public:
        _size = n;
    }
     template <class InputIterator>
+    //STL MARK: Check whether it's an integral type.  If so, it's not an iterator.
+    typename enable_if<!is_integral<InputIterator>::_value, void>::_type
     void assign (InputIterator first, InputIterator last) {
-
+        this->clear();
+        for(; first != last; ++first)
+            push_back(*first);
    }
 
    reference at(size_type index) {
