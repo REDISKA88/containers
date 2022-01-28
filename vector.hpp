@@ -5,8 +5,8 @@
 #include "iterator.hpp"
 #include "enable_if.hpp"
 #include "is_integral.hpp"
-#include <vector>
-std::vector<int> i;
+/*#include <vector>
+std::vector<int> i;*/
 namespace ft {
     template <typename T, class Allocator = std::allocator<T> >
     class vector;
@@ -130,6 +130,10 @@ public:
         _size = 0;
     }
 
+    size_type size() const {
+        return _size;
+    }
+
     size_type max_size() const {
         size_type ms;
         ms = _allocator.max_size();
@@ -177,6 +181,24 @@ public:
        _size = n;
    }
 
+   iterator erase(iterator position) {
+       pointer p_v;
+       iterator it = begin();
+       size_t i = 0;
+       while (it != position) {
+           it++;
+           i++;
+       }
+       while (i < _size - 1) {
+           p_v = _v[i + 1];
+           _v = p_v;
+           i++;
+       }
+       _allocator.destroy(&_v[_size]);
+       _size--;
+       return it;
+
+   }
     template <typename InputIterator>
     //STL MARK: Check whether it's an integral type.  If so, it's not an iterator.
     typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
@@ -198,13 +220,21 @@ public:
        else
            return _v[index];
    }
-
+    allocator_type get_allocator() const {
+       return _allocator;
+   }
    reference operator[](size_type index) {
        return _v[index];
    };
 
    const_reference operator[](size_type index) const {
        return _v[index];
+   }
+
+   vector& operator=(const vector&V) {
+       if (this != &V)
+           assign(V.begin(), V.end());
+       return *this;
    }
 
    ~vector() {
