@@ -12,19 +12,19 @@
 namespace ft {
 	template <typename T, typename Allocator = std::allocator<T> >
 	class vector {
-	public:
-        typedef T               value_type;
-        typedef size_t          size_type;
-		typedef Allocator       allocator_type;
-        typedef T&              reference;
-        typedef const   T&      const_reference;
-        typedef T*              pointer;
-		typedef long int        diff_type;
+    public:
+        typedef T value_type;
+        typedef size_t size_type;
+        typedef Allocator allocator_type;
+        typedef T &reference;
+        typedef const T &const_reference;
+        typedef T *pointer;
+        typedef long int diff_type;
 
-        typedef ft::vector_iterator<value_type>             iterator;
-		typedef ft::vector_iterator<value_type const>       const_iterator;
-		typedef ft::reverse_iterator<iterator>              reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>        const_reverse_iterator;
+        typedef ft::vector_iterator<value_type> iterator;
+        typedef ft::vector_iterator<value_type const> const_iterator;
+        typedef ft::reverse_iterator<iterator> reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
 	private:
 
