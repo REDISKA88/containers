@@ -304,7 +304,7 @@ namespace ft {
         }
 
         iterator insert(iterator position, const value_type &_vt) {
-            diff_type _d = position.get_ptr() - _v;
+            diff_type _d = position.base() - _v;
             insert(position, 1, _vt);
             return iterator(begin() + _d);
         }
