@@ -36,3 +36,30 @@ namespace ft {
                 return cmp(vt.first, vt2.first);
             }
         };
+
+        template <typename T_>
+        struct Node {
+            T_ data; Node *left; Node *right; Node *parent; bool last;
+            Node(T_ v, Node *l, Node *r, Node *p, bool e = false)
+                    : data(v), left(l), right(r), parent(p), last(e) {}
+        };
+
+        typedef Node<value_type>                                node_type;
+        typedef Node<value_type>*                               root_node;
+        typedef map_iterator<value_type, node_type*>            iterator;
+        typedef map_iterator<const value_type, node_type *>     const_iterator;
+        typedef ft::reverse_iterator<iterator>                  reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator>            const_reverse_iterator;
+        typedef typename allocator_type::template rebind<node_type>::other node_allocator;
+
+
+    protected:
+        root_node           _r;
+        size_type           _size;
+        key_compare         _key_compare;
+        node_allocator      _allocator;
+
+    };
+
+    }
+}
