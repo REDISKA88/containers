@@ -25,7 +25,7 @@ namespace ft {
                 this->_p = r._p;
             return *this;
         }
-      //-------------------------------------------------
+        //-------------------------------------------------
 
         map_iterator operator++(int) {
             map_iterator tmp = *this;
@@ -105,10 +105,5 @@ namespace ft {
 
     };
 }
-
-
-
-
-
 
 #endif
