@@ -80,7 +80,7 @@ namespace ft {
         ////////////////////////////////////////
 
         reference operator*() const {
-            return this->_p->value;
+            return this->_p->data;
         }
 
         pointer operator->() const {
