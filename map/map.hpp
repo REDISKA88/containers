@@ -53,11 +53,14 @@ namespace ft {
         typedef typename allocator_type::template rebind<node_type>::other node_allocator;
 
 
-    protected:
-        root_node           _r;
-        size_type           _size;
-        key_compare         _key_compare;
+    public:
         node_allocator      _allocator;
+        key_compare         _key_compare;
+        size_type           _size;
+        root_node           _r;
+
+
+
 
     public:
         explicit map(const key_compare& _cmp_ = key_compare(),
@@ -76,5 +79,4 @@ namespace ft {
         }
 
     };
-
 }
