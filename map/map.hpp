@@ -135,5 +135,47 @@ namespace ft {
             }
             return _node_;
         }
+
+        node_type *find_key(const key_type& _key, node_type* _node_) const {
+            if (!_node_ || _node_->last)
+                return NULL;
+            if (_key_compare(_key, _node_->data.first))
+                return find_key(_key, _node_->left);
+            else if (_key_compare(_node_->data.first, _key))
+                return find_key(_key, _node_->right);
+            else
+                return _node_;
+        }
+        //-----------------------------------------------------
+        iterator insert(iterator it, const value_type& vt) {
+            if (!_r) {
+                node_type *_new = _allocator.allocate(1);
+                _allocator.construct(_new, node_type(vt, NULL, NULL, NULL)); _size++;
+                _r = _new;
+                node_type *end = _allocator.allocate(1);
+                _allocator.construct(end,node_type(value_type(key_type(),mapped_type()),NULL,NULL,_r));
+                _r->right = end;
+                end->last = true;
+            }
+            if (_r->last) {
+                node_type *_new = _allocator.allocate(1);
+                _allocator.construct(_new, node_type(vt, NULL, NULL, NULL));
+                _r->parent = _new;
+                _new->right = _r;
+                _r = _new;
+                return _r;
+            }
+            it = NULL;
+            insertNode(vt, _r, NULL);
+            return iterator(find_key(vt.first, _r));
+        }
+
+        template <class InputIterator>
+        void insert(typename ft::enable_if<!ft::is_integral<InputIterator>::value,
+                InputIterator>::type first, InputIterator last) {
+            for(; first != last; first++)
+                insert(*first);
+        }
     };
+
 }
