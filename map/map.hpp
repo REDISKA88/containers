@@ -53,14 +53,11 @@ namespace ft {
         typedef typename allocator_type::template rebind<node_type>::other node_allocator;
 
 
-    public:
+    private:
         node_allocator      _allocator;
         key_compare         _key_compare;
         size_type           _size;
         root_node           _r;
-
-
-
 
     public:
         explicit map(const key_compare& _cmp_ = key_compare(),
@@ -77,6 +74,27 @@ namespace ft {
                             _key_compare(M._key_compare), _size(0), _r(NULL) {
             *this = M;
         }
-
+        //---------------
+        // node func
+        node_type *insertNode(const value_type& vt, node_type* _node_, node_type* parent) {
+            if (!_node_) {
+                node_type *node = _allocator.allocate(1);
+                _allocator.construct(node, node_type(vt, NULL, NULL, parent)); _size++;
+                return node;
+            }
+            if (_node_->last) {
+                node_type *_new = _allocator.allocate(1);
+                _allocator.construct(_new, node_type(vt, NULL, NULL, parent)); _size++;
+                _node_->parent = _new;
+                _new->right = _node_;
+                _node_ = _new;
+                return _node_;
+            }
+            if (_key_compare(vt.first, _node_->data.first))
+                _node_->left = insertNode(vt, _node_->left, _node_);
+            else if (_key_compare(_node_->data.first, vt.first))
+                _node_->right = insertNode(vt, _node_->right, _node_);
+            return _node_;
+        }
     };
 }
