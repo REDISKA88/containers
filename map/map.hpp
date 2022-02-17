@@ -136,17 +136,48 @@ namespace ft {
             return _node_;
         }
 
-        node_type *find_key(const key_type& _key, node_type* _node_) const {
+        node_type *findNode(const key_type& _key, node_type* _node_) const {
             if (!_node_ || _node_->last)
                 return NULL;
             if (_key_compare(_key, _node_->data.first))
-                return find_key(_key, _node_->left);
+                return findNode(_key, _node_->left);
             else if (_key_compare(_node_->data.first, _key))
-                return find_key(_key, _node_->right);
+                return findNode(_key, _node_->right);
             else
                 return _node_;
         }
-        //-----------------------------------------------------
+        //-----------------------
+        //simple
+        size_type size() const {
+            return _size;
+        }
+
+        size_type max_size() const {
+            return _allocator.max_size();
+        }
+
+        bool empty() const {
+            return _size == 0;
+        }
+
+        void clear() {
+            _size = 0;
+        }
+
+        allocator_type get_allocator() const {
+            return _allocator;
+        }
+
+        key_compare key_comp() const {
+            return _key_compare;
+        }
+
+        value_compare value_comp() const {
+            return value_compare(_key_compare);
+        }
+
+        //---------------------------------------
+
         iterator insert(iterator it, const value_type& vt) {
             if (!_r) {
                 node_type *_new = _allocator.allocate(1);
@@ -167,7 +198,7 @@ namespace ft {
             }
             it = NULL;
             insertNode(vt, _r, NULL);
-            return iterator(find_key(vt.first, _r));
+            return iterator(findNode(vt.first, _r));
         }
 
         template <class InputIterator>
@@ -177,5 +208,4 @@ namespace ft {
                 insert(*first);
         }
     };
-
 }
