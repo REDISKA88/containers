@@ -96,5 +96,44 @@ namespace ft {
                 _node_->right = insertNode(vt, _node_->right, _node_);
             return _node_;
         }
+
+        node_type *destroyNode(node_type* _node_, const key_type& _key) {
+            if (!_node_ || _node_->last)
+                return _node_;
+            if (_key_compare(_key, _node_->data.first))
+                _node_->left = destroyNode(_node_->left, _key);
+            else if (_key_compare(_node_->data.first, _key))
+                _node_->right = destroyNode(_node_->right, _key);
+            else {
+                if (!_node_->left || !_node_->right) {
+                    node_type *tmp = _node_->left ? _node_->left : _node_->right;
+                    if (!_node_->left && !_node_->right) {
+                        tmp = _node_; _node_ = NULL;
+                        _allocator.destroy(tmp); _allocator.deallocate(tmp, 1); _size--;
+                    } else {
+                        tmp->parent = _node_->parent;
+                        node_type *tmp2 = _node_; _node_ = tmp;
+                        _allocator.destroy(tmp2); _allocator.deallocate(tmp2, 1); _size--;
+                    }
+                } else {
+                    node_type *tmp = _node_->right;
+                    while (tmp->left != NULL)
+                        tmp = tmp->left;
+                    if (tmp != _node_->right) {
+                        tmp->right = _node_->right;
+                        _node_->right->parent = tmp;
+                    }
+                    tmp->left = _node_->left;
+                    _node_->left->parent = tmp;
+                    tmp->parent->left = NULL;
+                    tmp->parent = _node_->parent;
+                    if (_r == _node_)
+                        _r = tmp;
+                    _allocator.destroy(_node_); _allocator.deallocate(_node_, 1); _size--;
+                    _node_ = tmp;
+                }
+            }
+            return _node_;
+        }
     };
 }
