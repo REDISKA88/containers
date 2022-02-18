@@ -207,5 +207,113 @@ namespace ft {
             for(; first != last; first++)
                 insert(*first);
         }
+
+        //----------------------------------------------------------
+
+        iterator begin() {
+            if (_size == 0)
+                return _r;
+            node_type *tmp = _r;
+            while (tmp && tmp->left)
+                tmp = tmp->left;
+            return tmp;
+        }
+
+        const_iterator begin() const {
+            if (_size == 0)
+                return const_iterator(_r);
+            node_type *tmp = _r;
+            while (tmp && tmp->left)
+                tmp = tmp->left;
+            return const_iterator(tmp);
+        }
+
+        iterator end() {
+            if (!_r) {
+                insert(value_type(key_type(), mapped_type()));
+                _r->last = true;
+                _size--;
+            }
+            if (_size == 0)
+                return _r;
+            node_type *tmp = _r;
+            while (tmp && !tmp->last)
+                tmp = tmp->right;
+            return tmp;
+        }
+
+        const_iterator end() const {
+            if (_size == 0)
+                return const_iterator(_r);
+            node_type *tmp = _r;
+            while (tmp && !tmp->last)
+                tmp = tmp->right;
+            return const_iterator(tmp);
+        }
+
+        reverse_iterator rbegin() {
+            return reverse_iterator(end()--);
+        }
+
+        const_reverse_iterator rbegin() const {
+            return const_reverse_iterator(end()--);
+        }
+
+        reverse_iterator rend() {
+            return reverse_iterator(begin());
+        }
+
+        const_reverse_iterator rend() const {
+            return const_reverse_iterator(begin());
+        }
+
+        size_type count(const key_type& _key) {
+            if (find(_key) != end())
+                return 1;
+            return 0;
+        }
+
+        void swap(map &Map2) {
+            node_type* r = _r;
+            size_type size = _size;
+            key_compare key = _key_compare;
+            node_allocator alloc = _allocator;
+
+            _r = Map2._r;
+            _size = Map2._size;
+            _key_compare = Map2._key_compare;
+            _allocator = Map2._allocator;
+
+            Map2._r = r;
+            Map2._size = size;
+            Map2._key_compare = key;
+            Map2._allocator = alloc;
+        }
+
+        iterator find(const key_type& _key) {
+            node_type *tmp = findNode(_key, _r);
+            if (tmp)
+                return (iterator(tmp));
+            return end();
+        }
+
+        const_iterator find(const key_type& _key) const {
+            node_type *tmp = findNode(_key, _r);
+            if (tmp)
+                return const_iterator(tmp);
+            return const_iterator(end());
+        }
+
+        mapped_type &operator[](const key_type& _key)
+        {
+            node_type *tmp = findNode(_key, _r);
+            if (tmp)
+                return tmp->data.second;
+            insert(value_type(_key, mapped_type()));
+            return (findNode(_key, _r)->data.second);
+        }
     };
+
+    template <class Key, class T, class Compare, class Allocator>
+    void swap(map<Key, T, Compare, Allocator> &X, map<Key, T, Compare, Allocator> &Y) { X.swap(Y); }
 }
