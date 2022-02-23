@@ -1,25 +1,23 @@
-SRCS= 			test.cpp
+FT= ft_containers
 
-OBJS			= $(SRCS:.cpp=.o)
+STD = std_containers
 
-CPP				= clang++
-RM				= rm -f
-CXXFLAGS		= -Wall -Wextra -Werror -std=c++98
+CC = clang++
 
-NAME			=containers
+CLFAGS = -Wall -Wextra -Werror -std=c++98
 
-all:			$(NAME)
+SRC = .cpp
 
-$(NAME):		$(OBJS)
-				$(CPP) $(CXXFLAGS) -o $(NAME) $(OBJS)
+all: $(STD) $(FT)
+$(STD):
+	$(CC) $(CLFAGS) -o $(STD)  main.cpp
+
+$(FT):
+	$(CC) -DFT $(CLFAGS) -o $(FT)  main.cpp
 
 clean:
-				$(RM) $(OBJS)
+	rm -rf $(FT) $(STD) diff
 
-fclean:			clean
-				$(RM) $(NAME)
+fclean: clean
 
-re:				fclean $(NAME)
-
-
-.PHONY:			all clean fclean re test
+re: fclean all
